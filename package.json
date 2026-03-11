@@ -1,0 +1,22 @@
+{
+  "name": "agent-terminal",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "db:generate": "turbo db:generate --filter=@agent-terminal/api",
+    "db:migrate": "turbo db:migrate --filter=@agent-terminal/api",
+    "db:seed": "turbo db:seed --filter=@agent-terminal/api"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0"
+  },
+  "packageManager": "pnpm@9.14.1",
+  "pnpm": {
+    "overrides": {
+      "prisma": "npm:noop-package@1.0.0",
+      "@prisma/client": "npm:noop-package@1.0.0"
+    }
+  }
+}
