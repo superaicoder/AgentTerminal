@@ -8,6 +8,13 @@
       "when": 1773221808363,
       "tag": "0000_fearless_jane_foster",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773226758234,
+      "tag": "0001_gray_moira_mactaggert",
+      "breakpoints": true
     }
   ]
 }
