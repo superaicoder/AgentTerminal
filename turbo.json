@@ -11,6 +11,9 @@
     },
     "db:generate": {},
     "db:migrate": {},
-    "db:seed": {}
+    "db:seed": {},
+    "test": {
+      "cache": false
+    }
   }
 }

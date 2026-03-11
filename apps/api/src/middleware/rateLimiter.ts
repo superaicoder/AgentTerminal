@@ -1,6 +1,6 @@
 import rateLimit from "express-rate-limit";
 import RedisStore from "rate-limit-redis";
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { createRedisClient } from "../queue/index.js";
 import { RATE_LIMITS } from "@agent-terminal/shared";
 import type { Role } from "@agent-terminal/shared";
@@ -23,7 +23,7 @@ export const perMinuteLimit = rateLimit({
 });
 
 // Daily quota check middleware
-export async function checkDailyQuota(req: Request, res: Response, next: Function) {
+export async function checkDailyQuota(req: Request, res: Response, next: NextFunction) {
   if (!req.userId || !req.userRole) {
     res.status(401).json({ error: "Unauthorized" });
     return;

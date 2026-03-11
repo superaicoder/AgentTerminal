@@ -6,11 +6,13 @@
     "build": "turbo build",
     "db:generate": "turbo db:generate --filter=@agent-terminal/api",
     "db:migrate": "turbo db:migrate --filter=@agent-terminal/api",
-    "db:seed": "turbo db:seed --filter=@agent-terminal/api"
+    "db:seed": "turbo db:seed --filter=@agent-terminal/api",
+    "test": "turbo test"
   },
   "devDependencies": {
     "turbo": "^2.4.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.18"
   },
   "packageManager": "pnpm@9.14.1",
   "pnpm": {

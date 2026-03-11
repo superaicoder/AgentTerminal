@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Light theme (default) */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -13,8 +14,9 @@
   --bubble-assistant: #f5f5f5;
 }
 
+/* System preference dark */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --background: #0a0a0a;
     --foreground: #ededed;
     --sidebar-bg: #171717;
@@ -26,6 +28,20 @@
     --bubble-user: #1d4ed8;
     --bubble-assistant: #262626;
   }
+}
+
+/* Explicit dark theme */
+:root[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --sidebar-bg: #171717;
+  --border: #262626;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --muted: #a3a3a3;
+  --error: #ef4444;
+  --bubble-user: #1d4ed8;
+  --bubble-assistant: #262626;
 }
 
 * {
@@ -49,4 +65,43 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 3px;
+}
+
+/* Sidebar responsive */
+.sidebar-container {
+  display: block;
+}
+
+.sidebar-toggle {
+  display: none !important;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-container {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    z-index: 50;
+    transition: left 0.2s ease;
+  }
+
+  .sidebar-container.sidebar-open {
+    left: 0;
+  }
+
+  .sidebar-toggle {
+    display: inline-flex !important;
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .header-email {
+    display: none;
+  }
 }

@@ -8,9 +8,10 @@ interface Props {
   onNew: () => void;
   onDelete: (id: string) => void;
   onRename: (id: string, title: string) => void;
+  onSelect?: () => void;
 }
 
-export default function ChatSidebar({ conversations, onNew, onDelete, onRename }: Props) {
+export default function ChatSidebar({ conversations, onNew, onDelete, onRename, onSelect }: Props) {
   const router = useRouter();
   const params = useParams();
   const activeId = params?.id as string | undefined;
@@ -51,7 +52,7 @@ export default function ChatSidebar({ conversations, onNew, onDelete, onRename }
         {conversations.map((conv) => (
           <div
             key={conv.id}
-            onClick={() => router.push(`/chat/${conv.id}`)}
+            onClick={() => { router.push(`/chat/${conv.id}`); onSelect?.(); }}
             style={{
               padding: "0.625rem 0.75rem",
               borderRadius: "8px",

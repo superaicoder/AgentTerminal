@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import ChatSidebar from "@/components/ChatSidebar";
+import ThemeToggle from "@/components/ThemeToggle";
 import { useConversations } from "@/hooks/useConversations";
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
@@ -11,12 +12,16 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   const { data: session, isPending } = useSession();
   const { conversations, createConversation, deleteConversation, renameConversation } =
     useConversations();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!isPending && !session) {
       router.replace("/login");
     }
   }, [session, isPending, router]);
+
+  // Close sidebar on route change (mobile)
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
 
   if (isPending || !session) {
     return (
@@ -29,6 +34,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   async function handleNew() {
     const conv = await createConversation();
     router.push(`/chat/${conv.id}`);
+    closeSidebar();
   }
 
   async function handleDelete(id: string) {
@@ -37,13 +43,32 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <ChatSidebar
-        conversations={conversations}
-        onNew={handleNew}
-        onDelete={handleDelete}
-        onRename={renameConversation}
-      />
+    <div style={{ display: "flex", height: "100vh", position: "relative" }}>
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={closeSidebar}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.4)",
+            zIndex: 40,
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div className={`sidebar-container ${sidebarOpen ? "sidebar-open" : ""}`}>
+        <ChatSidebar
+          conversations={conversations}
+          onNew={handleNew}
+          onDelete={handleDelete}
+          onRename={renameConversation}
+          onSelect={closeSidebar}
+        />
+      </div>
+
       <main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <header
           style={{
@@ -55,9 +80,27 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
             fontSize: "0.8125rem",
           }}
         >
-          <span style={{ fontWeight: 600 }}>AgentTerminal</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <button
+              className="sidebar-toggle"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--foreground)",
+                cursor: "pointer",
+                fontSize: "1.25rem",
+                padding: "0.25rem",
+                lineHeight: 1,
+              }}
+            >
+              &#9776;
+            </button>
+            <span style={{ fontWeight: 600 }}>AgentTerminal</span>
+          </div>
           <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-            <span style={{ color: "var(--muted)" }}>{session.user.email}</span>
+            <ThemeToggle />
+            <span className="header-email" style={{ color: "var(--muted)" }}>{session.user.email}</span>
             <button
               onClick={() => router.push("/admin")}
               style={{

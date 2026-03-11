@@ -18,7 +18,7 @@ const sendSchema = z.object({
   model: z.string().optional(),
 });
 
-router.post("/send", perMinuteLimit, checkDailyQuota as any, async (req, res) => {
+router.post("/send", perMinuteLimit, checkDailyQuota, async (req, res) => {
   try {
     const body = sendSchema.parse(req.body);
 
